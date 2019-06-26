@@ -51,15 +51,17 @@ public class ClosestPair {
 
 		//calculate the closest point to p1 using brute force		
 		for(int index1=0; index1 < dataLength - 1; index1++) {
+			Point2D.Double p1 = data[index1];
 			
 			if(pw == null) {
 				System.out.println("\n================== index = " + index1 + "\n");
+				System.out.println("Comparing all points with point (" + p1.getX() + ", " + p1.getY() + ")"); 
 			} else {
 				pw.println("\n================== index = " + index1 + "\n");
+				pw.println("Comparing all points with point (" + p1.getX() + ", " + p1.getY() + ")");	
 			}
 			
 			for(int index2=index1 + 1; index2 < dataLength; index2++) {
-				Point2D.Double p1 = data[index1];
 				Point2D.Double p2 = data[index2];				
 				double distance = getDistance(p1, p2);
 
@@ -67,13 +69,6 @@ public class ClosestPair {
 				if(distance < this.minDist) {
 					this.minDist = distance;
 					this.closestPair = new Point2D.Double[] { p1, p2 };
-				}
-
-				//print trace run: each pair comparison and their distance
-				if(pw == null) {	
-					System.out.println(toString(p1, p2, distance));
-				} else {
-					pw.println(toString(p1, p2, distance));	
 				}
 			}
 			

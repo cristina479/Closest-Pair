@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,16 +24,16 @@ public class ClosestPair {
 	private double minDist = Double.MAX_VALUE;
 
 	public ClosestPair(double[][] a, PrintWriter pw) {
-		Point2D.Double[] A = new Point2D.Double[a.length];
+		Point2D.Double[] data = new Point2D.Double[a.length];
 		this.dataX = new Point2D.Double[a.length];
 		this.dataY = new Point2D.Double[a.length];
 		this.closestPair = new Point2D.Double[2];
 		this.closest = new ArrayList<Object[]>();
 
-		for(int i = 0; i < a.length; i++) {
-			A[i] = new Point2D.Double(a[i][0], a[i][1]);
-			this.dataX[i] = new Point2D.Double(a[i][0], a[i][1]);
-			this.dataY[i] = new Point2D.Double(a[i][0], a[i][1]);
+		for(int index = 0; index < a.length; index++) {
+			data[index] = new Point2D.Double(a[index][0], a[index][1]);
+			this.dataX[index] = new Point2D.Double(a[index][0], a[index][1]);
+			this.dataY[index] = new Point2D.Double(a[index][0], a[index][1]);
 		}
 
 		//sort dataX in ascending order relative to the x-coordinates
@@ -66,19 +67,19 @@ public class ClosestPair {
 			pw.println("Data Size: " + this.dataX.length + "\n");
 			
 			pw.println("dataX: ");
-			for(int i=0; i < this.dataX.length; i++) {
-				pw.print("(" + this.dataX[i].getX() + ", " + this.dataX[i].getY() + ")   " );
+			for(int index=0; index < this.dataX.length; index++) {
+				pw.print("(" + this.dataX[index].getX() + ", " + this.dataX[index].getY() + ")   " );
 				
-				if((i + 1) % 10 == 0) {
+				if((index + 1) % 10 == 0) {
 					pw.println();
 				}
 			}
-			
-			pw.println("\n\ndataY: ");
-			for(int i=0; i < this.dataY.length; i++) {
-				pw.print("(" + this.dataY[i].getX() + ", " + this.dataY[i].getY() + ")   " );
+			pw.println();
+			pw.println("dataY: ");
+			for(int index=0; index < this.dataY.length; index++) {
+				pw.print("(" + this.dataY[index].getX() + ", " + this.dataY[index].getY() + ")   " );
 				
-				if((i + 1) % 10 == 0) {
+				if((index + 1) % 10 == 0) {
 					pw.println();
 				}
 			}
@@ -90,19 +91,19 @@ public class ClosestPair {
 			System.out.println("Data Size: " + this.dataX.length + "\n");
 			
 			System.out.println("dataX: ");
-			for(int i=0; i < this.dataX.length; i++) {
-				System.out.print("(" + this.dataX[i].getX() + ", " + this.dataX[i].getY() + ")   " );
+			for(int index=0; index < this.dataX.length; index++) {
+				System.out.print("(" + this.dataX[index].getX() + ", " + this.dataX[index].getY() + ")   " );
 				
-				if((i + 1) % 10 == 0) {
+				if((index + 1) % 10 == 0) {
 					System.out.println();
 				}
 			}
 			
 			System.out.println("\n\ndataY: ");
-			for(int i=0; i < this.dataY.length; i++) {
-				System.out.print("(" + this.dataY[i].getX() + ", " + this.dataY[i].getY() + ")   " );
+			for(int index=0; index < this.dataY.length; index++) {
+				System.out.print("(" + this.dataY[index].getX() + ", " + this.dataY[index].getY() + ")   " );
 				
-				if((i + 1) % 10 == 0) {
+				if((index + 1) % 10 == 0) {
 					System.out.println();
 				}
 			}
@@ -111,49 +112,49 @@ public class ClosestPair {
 		}
 	}
 
-	public Object[] closestPairs(Point2D.Double[] Ax, Point2D.Double[] Ay, int n, PrintWriter pw, String partition) {
+	public Object[] closestPairs(Point2D.Double[] dataX, Point2D.Double[] dataY, int size, PrintWriter pw, String message) {
 
-		if(n <= 3) {		
-			return bruteForceCP(Ax, n, pw, partition);
+		if(size <= 3) {		
+			return bruteForceCP(dataX, size, pw, message);
 		}
 
 		//get middle point
-		Point2D.Double middlePoint = Ax[n/2];
+		Point2D.Double middlePoint = dataX[size/2];
 
 		//divide Ax in half into two arrays of points
-		Point2D.Double[] xLeft = new Point2D.Double[n/2];
-		Point2D.Double[] xRight = new Point2D.Double[n - (n/2)];
+		Point2D.Double[] xLeft = new Point2D.Double[size/2];
+		Point2D.Double[] xRight = new Point2D.Double[size - (size/2)];
 
 		//might not be needed
 		int xLeftLength = 0, xRightLength = 0; 
 
 		//initialize xLeft and xRight (each with half the points of Ax)
-		for(int i = 0; i < n; i++ ) {
-			if(i < n/2) {
-				xLeft[xLeftLength++] = Ax[i];
+		for(int index = 0; index < size; index++ ) {
+			if(index < size/2) {
+				xLeft[xLeftLength++] = dataX[index];
 			} else {
-				xRight[xRightLength++] = Ax[i];
+				xRight[xRightLength++] = dataX[index];
 			}
 		}
 
 		//divide Ax in half into two arrays of points
-		Point2D.Double[] yLeft = new Point2D.Double[n/2];
-		Point2D.Double[] yRight = new Point2D.Double[n - (n/2)];
+		Point2D.Double[] yLeft = new Point2D.Double[size/2];
+		Point2D.Double[] yRight = new Point2D.Double[size - (size/2)];
 
 		//might not be needed
 		int yLeftLength = 0, yRightLength = 0;
 
 		//initialize yLeft and yRight (each with half the points of Ay)
-		for(int i = 0; i < n; i++ ) {
-			if(Ay[i].getX() < middlePoint.getX()) {
-				yLeft[yLeftLength++] = Ay[i];
+		for(int index = 0; index < size; index++ ) {
+			if(dataY[index].getX() < middlePoint.getX()) {
+				yLeft[yLeftLength++] = dataY[index];
 			} else {
-				yRight[yRightLength++] = Ay[i];
+				yRight[yRightLength++] = dataY[index];
 			}
 		}
 		
 		if(pw == null) {
-			System.out.println("================== Data Size: " + n/2 + "\n");
+			System.out.println("================== Data Size: " + size/2 + "\n");
 			System.out.println("dataX: ");
 			System.out.print("L: ");
 			printData(xLeft, pw);
@@ -166,26 +167,26 @@ public class ClosestPair {
 			printData(yRight, pw);
 			System.out.println("\n");
 		} else {
-			pw.println("================== Data Size: " + n/2 + "\n");
+			pw.println("================== Data Size: " + size/2 + "\n");
 			pw.println("dataX: ");
 			pw.print("L: ");
 			printData(xLeft, pw);
 			pw.print("|  R: ");
 			printData(xRight, pw);
-			pw.println("\n\ndataY: ");
+			pw.println();
+			pw.println("dataY: ");
 			pw.print("L: ");
 			printData(yLeft, pw);
 			pw.print("|  R: ");
 			printData(yRight, pw);
-			pw.println("\n");
+			pw.println();
 		}
 
 		//recursively obtain the closest pair and minimum distance on the left side of middlePoint.x
-		Object[] temp1 = closestPairs(xLeft, yLeft, n/2, pw, " on the left side of dataX");
+		Object[] temp1 = closestPairs(xLeft, yLeft, size/2, pw, " on the left side of dataX");
 
 		//recursively obtain the closest pair and minimum distance of the right side of middlePoint.x
-		Object[] temp2 = closestPairs(xRight, yRight, n - (n/2), pw, " on the right side of dataX");
-
+		Object[] temp2 = closestPairs(xRight, yRight, size - (size/2), pw, " on the right side of dataX");
 		
 		//initialize closestPair by assigning the closest pair found in the left side of middlePoint.x
 		this.closestPair = (Point2D.Double[]) temp1[1];
@@ -201,32 +202,34 @@ public class ClosestPair {
 
 		//create an array to store the points in the strip. The strip consists of all the points to the left and right of the middlepoint.x 
 		//and that are not farther away from the middlepoint.x than the distance of the closest pairs
-		Point2D.Double[] strip = new Point2D.Double[n];
+		Point2D.Double[] strip = new Point2D.Double[size];
 		int stripLength = 0;
 		
 		if(pw == null) {
 			System.out.println("\n================== In Strip\n");
-			System.out.println("Points in x-coordinate between " + (middlePoint.getX() - this.minDist) + " to " + middlePoint.getX() + " and " + middlePoint.getX() + " to " + (middlePoint.getX() + this.minDist) + "\n");			
+			System.out.println("Points in x-coordinate between " + (middlePoint.getX() - this.minDist) + " to " + middlePoint.getX() + " and " + middlePoint.getX() + " to " + (middlePoint.getX() + this.minDist) + ":\n");			
 		} else {
-			pw.println("\n================== In Strip\n");
-			pw.println("Points in x-coordinate between " + (middlePoint.getX() - this.minDist) + " to " + middlePoint.getX() + " and " + middlePoint.getX() + " to " + (middlePoint.getX() + this.minDist) + "\n");			
+			pw.println();
+			pw.println("================== In Strip");
+			pw.println();
+			pw.println("Points in x-coordinate between " + (middlePoint.getX() - this.minDist) + " to " + middlePoint.getX() + " and " + middlePoint.getX() + " to " + (middlePoint.getX() + this.minDist) + ":\n");			
 		}
 
 		//initialize the array of points in the strip
-		for(int i = 0; i < n; i++) {
-			if(Math.abs(Ay[i].getX() - middlePoint.getX()) < this.minDist) {
-				strip[stripLength++] = Ay[i];
+		for(int index = 0; index < size; index++) {
+			if(Math.abs(dataY[index].getX() - middlePoint.getX()) < this.minDist) {
+				strip[stripLength++] = dataY[index];
 				
 				if(pw == null) {	
 					System.out.print("(" + strip[stripLength-1].getX() + ", " + strip[stripLength-1].getY() + ")   " );
 
-					if((i + 1) % 10 == 0) {
+					if((index + 1) % 10 == 0) {
 						System.out.println();
 					}
 				} else {
 					pw.print("(" + strip[stripLength-1].getX() + ", " + strip[stripLength-1].getY() + ")   " );
 
-					if((i + 1) % 10 == 0) {
+					if((index + 1) % 10 == 0) {
 						pw.println();
 					}		
 				}
@@ -236,7 +239,9 @@ public class ClosestPair {
 		if(pw == null) {
 			System.out.println("\n\nPoints to be compared in the strip relative to y-axis: \n");
 		} else {
-			pw.println("\n\nPoints to be compared in the strip relative to y-axis: \n");
+			pw.println();
+			pw.println();
+			pw.println("Points to be compared in the strip relative to y-axis: ");
 		}
 
 		//minD will store the minimum distance between the points in the strip. The largest value minD can have is this.minDist if no points in the strip are closer than the closest pair
@@ -245,21 +250,21 @@ public class ClosestPair {
 		boolean foundAPairToCompare = false;
 
 		//traverse the strip and compare the distance between each point. At most, the inner loop will run at most 6 times. Thus, this is O(n).
-		for(int i = 0; i < stripLength; i++) {
-			for(int j = i + 1; j < stripLength && (((Point2D.Double) strip[j]).getY() - ((Point2D.Double) strip[i]).getY()) < this.minDist; j++) {
+		for(int index1 = 0; index1 < stripLength; index1++) {
+			for(int index2 = index1 + 1; index2 < stripLength && (((Point2D.Double) strip[index2]).getY() - ((Point2D.Double) strip[index1]).getY()) < this.minDist; index2++) {
 				foundAPairToCompare = true;
-				double d = getDistance(strip[j], strip[i]);
+				double distance = getDistance(strip[index2], strip[index1]);
 				
-				if(d < minD) {
-					minD = d;
-					this.closestPair = new Point2D.Double[] {strip[j], strip[i]};
-					closest.add(new Object[] {minD, this.closestPair});
+				if(distance < minD) {
+					minD = distance;
+					this.closestPair = new Point2D.Double[] {strip[index2], strip[index1]};
+					closest.add(new Object[] { minD, this.closestPair });
 				}
 				
 				if(pw == null) {
-					System.out.println("(" + ((Point2D.Double) strip[i]).getX() + ", " + ((Point2D.Double) strip[i]).getY() + ") and (" + ((Point2D.Double) strip[j]).getX() + ", " + ((Point2D.Double) strip[j]).getY() + ") with distance: " + d);
+					System.out.println("(" + ((Point2D.Double) strip[index1]).getX() + ", " + ((Point2D.Double) strip[index1]).getY() + ") and (" + ((Point2D.Double) strip[index2]).getX() + ", " + ((Point2D.Double) strip[index2]).getY() + ") with distance: " + distance);
 				} else {
-					pw.println("(" + ((Point2D.Double) strip[i]).getX() + ", " + ((Point2D.Double) strip[i]).getY() + ") and (" + ((Point2D.Double) strip[j]).getX() + ", " + ((Point2D.Double) strip[j]).getY() + ") with distance: " + d);
+					pw.println("(" + ((Point2D.Double) strip[index1]).getX() + ", " + ((Point2D.Double) strip[index1]).getY() + ") and (" + ((Point2D.Double) strip[index2]).getX() + ", " + ((Point2D.Double) strip[index2]).getY() + ") with distance: " + distance);
 				}
 			}
 		}
@@ -279,41 +284,47 @@ public class ClosestPair {
 			System.out.println("----\n");
 			System.out.println(toString(new Object[] { this.minDist, this.closestPair }, "") + "\n");
 		} else {
-			pw.println("----\n");
-			pw.println(toString(new Object[] { this.minDist, this.closestPair }, "") + "\n");			
+			pw.println("----");
+			pw.println();
+			pw.println(toString(new Object[] { this.minDist, this.closestPair }, ""));	
+			pw.println();
 		}
 
-		return new Object[] {this.minDist, this.closestPair};
+		return new Object[] { this.minDist, this.closestPair };
 	}
 
 	private void printData(Point2D.Double[] points, PrintWriter pw) {
 		if(pw == null) {
-			for(int i=0; i < points.length; i++) {
-				System.out.print("(" + points[i].getX() + ", " + points[i].getY() + ")   " );
+			for(int index=0; index < points.length; index++) {
+				System.out.print("(" + points[index].getX() + ", " + points[index].getY() + ")   " );
 
-				if((i + 1) % 10 == 0) {
+				if((index + 1) % 10 == 0) {
 					System.out.println();
 				}
 			}
 		} else {
-			for(int i=0; i < points.length; i++) {
-				pw.print("(" + points[i].getX() + ", " + points[i].getY() + ")   " );
+			for(int index=0; index < points.length; index++) {
+				pw.print("(" + points[index].getX() + ", " + points[index].getY() + ")   " );
 
-				if((i + 1) % 10 == 0) {
+				if((index + 1) % 10 == 0) {
 					pw.println();
 				}
 			}
 		}
 	}
 
-	public Object[] bruteForceCP(Point2D.Double[] A, int n, PrintWriter pw, String partition) {
+	public Object[] bruteForceCP(Point2D.Double[] data, int size, PrintWriter pw, String message) {
 		double minD = Double.MAX_VALUE;
 		Point2D.Double[] cPair = new Point2D.Double[2];
+		
+		if(pw != null) {
+			pw.println();
+		}
 
-		for(int i = 0; i < n - 1; i++) {
-			for(int j = i + 1; j < n; j++) {
-				Point2D.Double p1 = A[i];
-				Point2D.Double p2 = A[j];
+		for(int index1 = 0; index1 < size - 1; index1++) {
+			for(int index2 = index1 + 1; index2 < size; index2++) {
+				Point2D.Double p1 = data[index1];
+				Point2D.Double p2 = data[index2];
 
 				double distance = getDistance(p1, p2);
 				if(distance < minD) {
@@ -323,13 +334,12 @@ public class ClosestPair {
 				
 				this.closest.add(new Object[] { distance, new Point2D.Double[] { p1, p2 }});
 			}
-			
-			if(pw == null) {
-				System.out.println(toString(new Object[] { minD, cPair }, partition));
-			} else {
-				
-				pw.println(toString(new Object[] { minD, cPair }, partition));
-			}
+		}
+		
+		if(pw == null) {
+			System.out.println(toString(new Object[] { minD, cPair }, message));
+		} else {
+			pw.println(toString(new Object[] { minD, cPair }, message));
 		}
 
 		return new Object[] { minD, cPair };
@@ -360,14 +370,19 @@ public class ClosestPair {
 		return this.dataY;
 	}
 
-	public String toString(List<Object[]> closestPairsList, int m) { 
-		String result = "Closest m = " + m + " Pairs are: \n";
+	public String toString(List<Object[]> closestPairsList, int sizeM, PrintWriter pw) { 
+		String result = "";
 
-		for(int i = 0; i < m && i < closestPairsList.size(); i++) {
-			Object[] obj = closestPairsList.get(i);
+		for(int index = 0; index < sizeM && index < closestPairsList.size(); index++) {
+			Object[] obj = closestPairsList.get(index);
 			Point2D.Double[] pairs = ((Point2D.Double[]) obj[1]);
 			double distance = (double) obj[0];
-			result += "(" + pairs[0].getX() + ", " + pairs[0].getY() + ") and (" + pairs[1].getX() + ", " + pairs[1].getY() + ") with distance: " + distance + "\n";
+			
+			if(pw == null) {
+				result += "(" + pairs[0].getX() + ", " + pairs[0].getY() + ") and (" + pairs[1].getX() + ", " + pairs[1].getY() + ") with distance: " + distance + "\n";
+			} else {
+				pw.println("(" + pairs[0].getX() + ", " + pairs[0].getY() + ") and (" + pairs[1].getX() + ", " + pairs[1].getY() + ") with distance: " + distance);
+			}
 		}
 
 		return result;
@@ -380,30 +395,48 @@ public class ClosestPair {
 		return "Closest Pair" + partition + " is (" + pairs[0].getX() + ", " + pairs[0].getY() + ") and (" + pairs[1].getX() + ", " + pairs[1].getY() + ") with distance: " + distance;
 	}
 
-	public void printOutput(Object[] closestPair, List<Object[]> closestPairsList, int m, PrintWriter pw) {
+	public void printOutput(Object[] closestPair, List<Object[]> closestPairsList, int sizeM, PrintWriter pw) {
 		if(pw == null) {
 			System.out.println("==============================================================================");
 		} else {
 			pw.println("==============================================================================");
 		}
 		
+		//sort closestPairs list
+		if(closestPairsList != null) {
+			Comparator<Object[]> compareByDist = (Object[] obj1, Object[] obj2) -> ((Double) obj1[0]).compareTo((Double) obj2[0]);
+			Collections.sort(closestPairsList, compareByDist);
+		}
+		
 		if(pw == null) {
-			if(closestPair != null && m == 1) {
+			if(closestPair != null && sizeM == 1) {
 				//write to console
 				System.out.println("RESULT: " + toString(closestPair, "") + "\n");
-			} else if(closestPairsList != null && (m > 0 && m <= this.dataX.length - 1)) {
+			} else if(closestPairsList != null && (sizeM > 0 && sizeM <= this.dataX.length - 1)) {
 				//write to console
-				System.out.println("RESULT: " + toString(closestPairsList, m));
+				System.out.println("RESULT: " + "Closest m = " + sizeM + " Pairs are: \n" + toString(closestPairsList, sizeM, null));
 			}
 		} else {
-			if(closestPair != null && m == 1) {
+			if(closestPair != null && sizeM == 1) {
 				//write to file
-				pw.print("RESULT: " + toString(closestPair, "") + "\n");
-			} else if(closestPairsList != null && (m > 0 && m <= this.dataX.length - 1)) {
+				pw.println("RESULT: " + toString(closestPair, ""));
+				pw.println();
+			} else if(closestPairsList != null && (sizeM > 0 && sizeM <= this.dataX.length - 1)) {
 				//write to file
-				pw.print("RESULT: " + toString(closestPairsList, m));
+				pw.println("RESULT: " + "Closest m = " + sizeM + " Pairs are: "); 
+				pw.println(toString(closestPairsList, sizeM, pw));
 			}
 		}
 	}
+	
+	Comparator<Object[]> compareById = new Comparator<Object[]>() {
+		@Override
+		public int compare(Object[] obj1, Object[] obj2) {
+			Double dist1 = (Double) obj1[0];
+			Double dist2 = (Double) obj2[0];
+			
+			return dist1.compareTo(dist2);
+		}
+	};
 	
 }

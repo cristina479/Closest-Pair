@@ -33,9 +33,13 @@ public class ClosestPair {
 			this.data[index1] = new Point2D.Double(data[index1][0], data[index1][1]);
 
 			if(pw == null) {
-				System.out.println(pointToString(this.data[index1]));
+				System.out.print(pointToString(this.data[index1]));
 			} else {
-				pw.println(pointToString(this.data[index1]));	
+				pw.print(pointToString(this.data[index1]));	
+			}
+			
+			if((index1 + 1) % 10 == 0) {
+				pw.println();
 			}
 		}
 	}
@@ -73,9 +77,9 @@ public class ClosestPair {
 			}
 			
 			if(pw == null) {
-				System.out.println("\n" + toString(this.closestPair, this.minDist));
+				System.out.println(toString(this.closestPair, this.minDist));
 			} else {
-				pw.println("\n" + toString(this.closestPair, this.minDist));
+				pw.println(toString(this.closestPair, this.minDist));
 			}
 		}
 		
@@ -117,7 +121,7 @@ public class ClosestPair {
 
 	public void printOutput(Point2D.Double[] resultList, double distance, PrintWriter pw) {
 		if(pw == null) {
-			System.out.println("ANSWER: " + toString(resultList, distance));
+			System.out.println("RESULT: " + toString(resultList, distance));
 		} else {
 			pw.println("RESULT: " + toString(resultList, distance));	
 		}

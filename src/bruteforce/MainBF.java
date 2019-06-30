@@ -16,6 +16,7 @@ public class MainBF {
 	static double[][] A;
 	static double randomDouble;
 	static BigDecimal bd = null;
+	static int workMain = 0;
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
@@ -46,10 +47,16 @@ public class MainBF {
 		if (!trace_run_console) {
 			try {
 				printWriter = new PrintWriter(new FileWriter(filepath + "n=" + size + ".txt"));
-				// initialize data points
+				
+				workMain++;
 				pairs = new ClosestPair(A, printWriter);
+				
+				workMain++;
+				workMain++;
 				// calculate the closest pair in a 2D array A
 				pairs.bruteForceCP(pairs.getA(), A.length, printWriter);
+				
+				//No work calculated
 				// print closesPair
 				pairs.printOutput(pairs.getClosestPair(), pairs.getMinDist(), printWriter);
 
@@ -60,11 +67,20 @@ public class MainBF {
 					printWriter.close();
 			}
 		} else {
+			workMain++;
 			pairs = new ClosestPair(A, null);
+			
+			workMain++;
+			workMain++;
 			// calculate the closest pair in a 2D array A
 			pairs.bruteForceCP(pairs.getA(), A.length, null);
+			
+			//No work calculated
 			// print closesPair
 			pairs.printOutput(pairs.getClosestPair(), pairs.getMinDist(), null);
 		}
+		
+		System.out.println("\nTotal work done: " + (workMain + pairs.getWork() + 1));
+
 	}
 }

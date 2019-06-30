@@ -15,7 +15,8 @@ public class ClosestPair {
 	private Point2D.Double[] data;
 	private Point2D.Double[] closestPair;
 	private double minDist = Double.MAX_VALUE;
-	private static final boolean PRINT_TRACES = false;
+	private static final boolean PRINT_TRACE = false;
+	static int work = 0;
 
 	public ClosestPair(double[][] data, PrintWriter pw) {
 		this.data = new Point2D.Double[data.length];
@@ -33,7 +34,6 @@ public class ClosestPair {
 		for (int index1 = 0; index1 < data.length; index1++) {
 			this.data[index1] = new Point2D.Double(data[index1][0], data[index1][1]);
 
-
 			if (pw == null) {
 				System.out.print(pointToString(this.data[index1]) + "   ");
 
@@ -47,13 +47,14 @@ public class ClosestPair {
 					pw.println();
 				}
 			}
-
+			work++;
 		}
+		work++;
+		work++;
 	}
 
 	public void bruteForceCP(Point2D.Double[] data, int dataLength, PrintWriter pw) {
 		// print trace run: the current closest pairs and their distance
-
 		if (pw == null) {
 			System.out.println("\n=================================== OUTPUT ===================================");
 		} else {
@@ -64,7 +65,7 @@ public class ClosestPair {
 		for (int index1 = 0; index1 < dataLength - 1; index1++) {
 			Point2D.Double p1 = data[index1];
 
-			if(PRINT_TRACES) {
+			if(PRINT_TRACE) {
 				if (pw == null) {
 					System.out.println("\n================== index = " + index1 + "\n");
 					System.out.println("Comparing all points with point (" + p1.getX() + ", " + p1.getY() + ")");
@@ -76,6 +77,7 @@ public class ClosestPair {
 
 			for (int index2 = index1 + 1; index2 < dataLength; index2++) {
 				Point2D.Double p2 = data[index2];
+				work++;
 				double distance = getDistance(p1, p2);
 
 				// update closest pairs and their distance
@@ -83,18 +85,22 @@ public class ClosestPair {
 					this.minDist = distance;
 					this.closestPair = new Point2D.Double[] { p1, p2 };
 				}
+				work++;
 			}
+			work++;
 
-			if(PRINT_TRACES) {
+			if(PRINT_TRACE) {
 				if (pw == null) {
 					System.out.println(toString(this.closestPair, this.minDist));
 				} else {
 					pw.println(toString(this.closestPair, this.minDist));
 				}
 			}
+			work++;
 		}
+		work++;
 
-		if(PRINT_TRACES) {
+		if(PRINT_TRACE) {
 			if (pw == null) {
 				System.out.println("\n==============================================================================\n");
 			} else {
@@ -105,10 +111,12 @@ public class ClosestPair {
 
 	public double getDistance(Point2D.Double point1, Point2D.Double point2) {
 		// distance between p1 and p2
+		work++;
 		return Math.sqrt(Math.pow(point1.getX() - point2.getX(), 2) + Math.pow(point1.getY() - point2.getY(), 2));
 	}
 
 	public Point2D.Double[] getA() {
+		work++;
 		return this.data;
 	}
 
@@ -117,9 +125,14 @@ public class ClosestPair {
 	}
 
 	public double getMinDist() {
+		work++;
 		return this.minDist;
 	}
 
+	public int getWork() {
+		return ++work;
+	}
+	
 	public String pointToString(Point2D.Double point) {
 		return "(" + point.getX() + ", " + point.getY() + ")";
 	}

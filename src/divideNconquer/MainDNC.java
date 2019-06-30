@@ -23,6 +23,7 @@ public class MainDNC {
 	static double[][] A;
 	static double randomDouble;
 	static BigDecimal bd = null;
+	static int workMain = 0;
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
@@ -39,11 +40,11 @@ public class MainDNC {
 		in.close();
 
 		System.out.println("\nStarting work. Please wait...\n");
-		myMethodName(nSize, mSize);
+		run(nSize, mSize);
 		System.out.println("\nDone!!\n");
 	}
 
-	private static void myMethodName(int n, int m) {
+	private static void run(int n, int m) {
 		A = new double[n][2];
 
 		// creating array of points A
@@ -61,12 +62,20 @@ public class MainDNC {
 		if (!trace_run_console) {
 			try {
 				printWriter = new PrintWriter(new FileWriter(filepath + "n=" + n + ".txt"));
-				// initialize data points
+				
+				workMain++;
 				pairs = new ClosestPair(A, printWriter);
+				
+				workMain++;   //call to getAx
+				workMain++;   //call to getAy
+				workMain++;	  //call to closestPairs()
+				
 				// Calculates the closest m <= n-1 pair of points in a 2D array A
 				pairs.closestPairs(pairs.getAx(), pairs.getAy(), A.length, printWriter, "");
+				
 				// Prints the single closest pair in A and it's respective distance
 				pairs.printOutput(pairs.getClosestPair(), null, 1, printWriter);
+				
 				// Prints the single closest pair in A and it's respective distance
 				pairs.printOutput(null, pairs.getClosestMPairs(), m, printWriter);
 
@@ -77,13 +86,25 @@ public class MainDNC {
 					printWriter.close();
 			}
 		} else {
+			workMain++;
 			pairs = new ClosestPair(A, null);
+			
+			workMain++;   //call to getAx
+			workMain++;   //call to getAy
+			workMain++;	  //call to closestPairs()
+			
 			// Calculates the closest m <= n-1 pair of points in a 2D array A
 			pairs.closestPairs(pairs.getAx(), pairs.getAy(), A.length, null, "");
+			
+			//No work calculated
 			// Prints the single closest pair in A and it's respective distance
 			pairs.printOutput(pairs.getClosestPair(), null, 1, null);
+			
+			//No work calculated
 			// Prints the single closest pair in A and it's respective distance
 			pairs.printOutput(null, pairs.getClosestMPairs(), m, null);
 		}
+		
+		System.out.println("Total work done: " + (workMain + pairs.getWork() + 1));
 	}
 }

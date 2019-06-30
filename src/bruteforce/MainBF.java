@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class MainBF {
 
-	final static int MAX_LENGTH_ARRAY = 30;
-	final static String filepath = "src/bruteforce/";
+	final static int MAX_LENGTH_ARRAY = 30;  
+	final static String filepath = "./bruteforce/";
 	static PrintWriter printWriter = null;
 	static ClosestPair pairs = null;
 	static double[][] A;
@@ -59,7 +59,10 @@ public class MainBF {
 				//No work calculated
 				// print closesPair
 				pairs.printOutput(pairs.getClosestPair(), pairs.getMinDist(), printWriter);
-
+				
+				printWriter.println();
+				printWriter.println("\nTotal work done: " + (workMain + pairs.getWork() + 1));
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
@@ -78,9 +81,9 @@ public class MainBF {
 			//No work calculated
 			// print closesPair
 			pairs.printOutput(pairs.getClosestPair(), pairs.getMinDist(), null);
+			
+			System.out.println("\nTotal work done: " + (workMain + pairs.getWork() + 1));
 		}
 		
-		System.out.println("\nTotal work done: " + (workMain + pairs.getWork() + 1));
-
 	}
 }

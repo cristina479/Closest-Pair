@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class MainDNC {
 
 	final static int MAX_LENGTH_ARRAY = 30;
-	final static String filepath = "src/divideNconquer/";
+	final static String filepath = "./divideNconquer/";
 	static PrintWriter printWriter = null;
 	static ClosestPair pairs = null;
 	static double[][] A;
@@ -78,6 +78,8 @@ public class MainDNC {
 				
 				// Prints the single closest pair in A and it's respective distance
 				pairs.printOutput(null, pairs.getClosestMPairs(), m, printWriter);
+				
+				printWriter.println("\nTotal work done: " + (workMain + pairs.getWork() + 1));
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -103,8 +105,9 @@ public class MainDNC {
 			//No work calculated
 			// Prints the single closest pair in A and it's respective distance
 			pairs.printOutput(null, pairs.getClosestMPairs(), m, null);
-		}
-		
-		System.out.println("Total work done: " + (workMain + pairs.getWork() + 1));
+			
+			System.out.println("Total work done: " + (workMain + pairs.getWork() + 1));
+		}		
 	}
+	
 }

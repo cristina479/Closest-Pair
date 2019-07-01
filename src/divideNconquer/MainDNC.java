@@ -11,7 +11,8 @@ import java.math.MathContext;
 import java.util.Scanner;
 
 /**
- * @author crist
+ * Main class for Closest Pair Divide N Conquer algorithm
+ * @author Cristina Padro-Juarbe
  *
  */
 public class MainDNC {
@@ -32,6 +33,8 @@ public class MainDNC {
 		System.out.println("\nEnter an integer M : ");
 		
 		int mSize = in.nextInt();
+		
+		// get the number of closest m pair of points from the user
 		while(mSize < 0 || mSize >= nSize) {
 			System.out.println("M must be an integer between 1 and " + (nSize - 1));
 			System.out.println("\nEnter an integer size for a 2D array: ");
@@ -44,41 +47,58 @@ public class MainDNC {
 		System.out.println("\nDone!!\n");
 	}
 
-	private static void run(int n, int m) {
-		A = new double[n][2];
+	/**
+	 * This method creates a random number of points of length specified by the user and calls the 'bruteforceCP' method 
+	 * to compute the closest pair of points in an array using brute force.
+	 * This method prints traces (if active) and prints the output to a file (if size > 30) or to the terminal (if size <= 30).
+	 * 
+	 * @param size 
+	 * @param sizeM
+	 */
+	private static void run(int size, int sizeM) {
+		A = new double[size][2];
 
+		// no work is recorder when creating the array of points
 		// creating array of points A
 		for (int index1 = 0; index1 < A.length; index1++) {
 			for (int index2 = 0; index2 < 2; index2++) {
 				randomDouble = Math.random() * 1000 + 0.1;
+				
+				//Big Decimal is used to use get double values for (x, y) points for up to 8 digits
 				bd = new BigDecimal(randomDouble);
 				bd = bd.round(new MathContext(8));
 				A[index1][index2] = bd.doubleValue();
 			}
 		}
 
+		// If true, print output to the console. Else, print output to a file
 		boolean trace_run_console = A.length <= MAX_LENGTH_ARRAY ? true : false;
 
+		// print output to a file
 		if (!trace_run_console) {
 			try {
-				printWriter = new PrintWriter(new FileWriter(filepath + "n=" + n + ".txt"));
+				printWriter = new PrintWriter(new FileWriter(filepath + "n=" + size + ".txt"));
 				
-				workMain++;
-				pairs = new ClosestPair(A, printWriter);
+				workMain++;		// work recorded for calling the ClosestPair constructor class
+				pairs = new ClosestPair(A, printWriter);				
 				
-				workMain++;   //call to getAx
-				workMain++;   //call to getAy
-				workMain++;	  //call to closestPairs()
+				workMain++;   	// work recorded for calling the closestPairsDNC() method
+				workMain++;   	// work recorded for calling the getDataX() method
+				workMain++;	  	// work recorded for calling the getDataY() method
 				
-				// Calculates the closest m <= n-1 pair of points in a 2D array A
-				pairs.closestPairs(pairs.getAx(), pairs.getAy(), A.length, printWriter, "");
+				// calculates the closest m <= n-1 pair of points in a 2D array A
+				pairs.closestPairsDNC(pairs.getDataX(), pairs.getDataY(), A.length, printWriter, "");
 				
-				// Prints the single closest pair in A and it's respective distance
+				// no work calculated for IO operations
+				// print the single closest pair of points found and it's distance to a file
 				pairs.printOutput(pairs.getClosestPair(), null, 1, printWriter);
 				
-				// Prints the single closest pair in A and it's respective distance
-				pairs.printOutput(null, pairs.getClosestMPairs(), m, printWriter);
+				// no work calculated for IO operations
+				// prints the closest m <= n-1 pair of points and their distance
+				pairs.printOutput(null, pairs.getClosestMPairs(), sizeM, printWriter);
 				
+				// print the total work calculated from the work in the MainBF class and in the Closest Pair class to the terminal
+				// work recorded for calling the getWork() method
 				printWriter.println("\nTotal work done: " + (workMain + pairs.getWork() + 1));
 
 			} catch (IOException e) {
@@ -88,24 +108,26 @@ public class MainDNC {
 					printWriter.close();
 			}
 		} else {
-			workMain++;
+			workMain++;		//work recorded for calling the ClosestPair constructor class
 			pairs = new ClosestPair(A, null);
 			
-			workMain++;   //call to getAx
-			workMain++;   //call to getAy
-			workMain++;	  //call to closestPairs()
+			workMain++;	  	// work recorded for calling the closestPairsDNC() method
+			workMain++;   	// work recorded for calling the getDataX() method
+			workMain++;   	// work recorded for calling the getDataY() method
 			
-			// Calculates the closest m <= n-1 pair of points in a 2D array A
-			pairs.closestPairs(pairs.getAx(), pairs.getAy(), A.length, null, "");
+			// calculates the closest m <= n-1 pair of points in a 2D array A
+			pairs.closestPairsDNC(pairs.getDataX(), pairs.getDataY(), A.length, null, "");
 			
-			//No work calculated
-			// Prints the single closest pair in A and it's respective distance
+			// no work calculated for IO operations
+			// print the single closest pair of points found and it's distance to the terminal
 			pairs.printOutput(pairs.getClosestPair(), null, 1, null);
 			
-			//No work calculated
-			// Prints the single closest pair in A and it's respective distance
-			pairs.printOutput(null, pairs.getClosestMPairs(), m, null);
+			// no work calculated for IO operations
+			// prints the closest m <= n-1 pair of points and their distance to the terminal
+			pairs.printOutput(null, pairs.getClosestMPairs(), sizeM, null);
 			
+			// print the total work calculated from the work in the MainDNC class and in the Closest Pair class to the terminal
+			// work recorded for calling the getWork() method
 			System.out.println("Total work done: " + (workMain + pairs.getWork() + 1));
 		}		
 	}

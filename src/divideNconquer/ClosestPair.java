@@ -126,15 +126,15 @@ public class ClosestPair {
 	 * @return the closest pair of points (x, y) in an array of points (x, y) and their distance
 	 */
 	public Object[] closestPairsDNC(Point2D.Double[] dataX, Point2D.Double[] dataY, int size, PrintWriter pw, String message) {
-		// base case
-		if(size <= 3) {	
+		// base case: use brute force to get closest pair of points	
+		if(size <= 3) {
 			work++;		// work recorded for calling the bruteForceCP() method
 			return bruteForceCP(dataX, size, pw, message);
 		}
 		
 		// divide dataX and dataY in half into two arrays of points 
-		int leftSize = (int) Math.ceil(size/2);				// (size/2)
-		int rightSize = (int) (Math.ceil(size/2) + 1);		// size - (size/2)
+		int leftSize = size/2; //(int) Math.ceil(size/2);				// (size/2)
+		int rightSize = size - (size/2); //(int) (Math.ceil(size/2));		// size - (size/2)
 
 		// get middle point in dataX
 		Point2D.Double middlePoint = dataX[leftSize];
@@ -146,24 +146,25 @@ public class ClosestPair {
 		// initializing the counters (indices) for the size of arrays xLeft and xRight
 		int xLeftLength = 0, xRightLength = 0; 
 
+//		System.out.print("dataX indices: ");
+		
 		// initialize xLeft and xRight (each with half the points of dataX)
 		for(int index = 0; index < size; index++ ) {	
 			// lower half of points in dataX
-			if(index < leftSize) {
-				// TODO: REMOVE
-				if(xLeftLength >= xLeft.length || index >= dataX.length) {
-					System.out.println("xLeftLength: " + xLeftLength);
-				}				
-				xLeft[xLeftLength++] = dataX[index];
-			} else {
-				// TODO: REMOVE
-				if(xRightLength >= xRight.length || index >= dataX.length) {
-					System.out.println("xRightLength: " + xRightLength);
+			if(dataX[index] != null) {
+				if(index < leftSize) {				
+					xLeft[xLeftLength++] = dataX[index];			
+				} else {
+					// upper half of points in dataX
+					xRight[xRightLength++] = dataX[index];
 				}
-				// upper half of points in dataX
-				xRight[xRightLength++] = dataX[index];
 			}
 			
+//			if(index == size - 1) {
+//				System.out.println(index + " dataX size: " + dataX.length);
+//				System.out.println("xLeftLength: " + xLeftLength);
+//				System.out.println("xRightLength: " + xRightLength + "\n");
+//			}
 			work++;		// work recorded for every loop iteration in the outer loop
 		}
 		work++;		// work recorded for breaking from the inner loop
@@ -172,47 +173,31 @@ public class ClosestPair {
 		Point2D.Double[] yLeft = new Point2D.Double[leftSize];
 		Point2D.Double[] yRight = new Point2D.Double[rightSize];	
 		
-		// TODO: REMOVE
-		System.out.println();
-		
 		// initializing the counters (indices) for the size of arrays yLeft and yRight
 		int yLeftLength = 0, yRightLength = 0;
+		
+//		System.out.print("dataY indices: ");
 
 		// initialize yLeft and yRight (each with half the points of dataY)
-		for(int index = 0; index < size; index++ ) {	
-			// TODO: REMOVE
-			if(index >= dataY.length || middlePoint == null || dataY[index] == null) {
-				System.out.println("dataY[index]: " + dataY[index]);
+		for(int index = 0; index < size; index++ ) {			
+			if(dataY[index] != null) {
+				// lower half of points in dataY where the x-coordinate is no greater than the x-coordinate of the middle point of dataX
+				if(yLeftLength < yLeft.length) {			//dataY[index].getX() <= middlePoint.getX() && 
+					yLeft[yLeftLength++] = dataY[index];
+				} else {
+					// upper half of points in dataY where the x-coordinate is greater than the x-coordinate of the middle point of dataX
+					yRight[yRightLength++] = dataY[index];	
+				}
 			}
 			
-			// lower half of points in dataY where the x-coordinate is no greater than the x-coordinate of the middle point of dataX
-			if(dataY[index].getX() <= middlePoint.getX()) {
-				// TODO: REMOVE
-				if(yLeftLength >= yLeft.length || index >= dataY.length) {
-					System.out.println("yLeftLength: " + yLeftLength);
-				}
-				yLeft[yLeftLength++] = dataY[index];
-			} else {
-				// TODO: REMOVE
-				if(yRightLength >= yRight.length || index >= dataY.length) {
-					System.out.println("yRightLength: " + yRightLength);
-				}
-				// upper half of points in dataY where the x-coordinate is greater than the x-coordinate of the middle point of dataX
-				yRight[yRightLength++] = dataY[index];
-			}
-			
+//			if(index == size - 1) {
+//				System.out.println(index + " dataY size: " + dataY.length);
+//				System.out.println("yLeftLength: " + yLeftLength);
+//				System.out.println("yRightLength: " + yRightLength + "\n");
+//			}
 			work++;		// work recorded for every loop iteration in the outer loop
 		}
 		work++;		// work recorded for breaking from the inner loop
-		
-		// TODO: REMOVE???
-		if(yRightLength < rightSize) {
-			rightSize = yRightLength;
-		}
-		
-		if(xRightLength > yRightLength) {
-			rightSize = xRightLength;
-		}
 		
 		// no work calculated for IO operations
 		// prints the points in dataX and dataY in each recursion
@@ -292,7 +277,7 @@ public class ClosestPair {
 
 		// initialize the strip array of points (x, y)
 		for(int index = 0; index < size; index++) {
-			if(Math.abs(dataY[index].getX() - middlePoint.getX()) < this.minDist) {
+			if(dataY[index] != null && Math.abs(dataY[index].getX() - middlePoint.getX()) < this.minDist) {
 				strip[stripLength++] = dataY[index];
 				
 				// no work calculated for IO operations 
@@ -395,6 +380,9 @@ public class ClosestPair {
 			} else {
 				pw.println("----");
 				pw.println();
+				if(this.closestPair == null) {
+					pw.println(toString(new Object[] { this.minDist, this.closestPair }, ""));	
+				}
 				pw.println(toString(new Object[] { this.minDist, this.closestPair }, ""));	
 				pw.println();
 			}
@@ -428,23 +416,25 @@ public class ClosestPair {
 		// will have at most three pair of points (x, y) to compare
 		for(int index1 = 0; index1 < size - 1; index1++) {
 			for(int index2 = index1 + 1; index2 < size; index2++) {
-				Point2D.Double p1 = data[index1];
-				Point2D.Double p2 = data[index2];
-				
-				work++;		// work recorded for calling the getDistance() method
-				double distance = getDistance(p1, p2);
-				
-				// update the closest distance between two pairs
-				// update the closest pairs
-				if(distance < minD) {
-					minD = distance;
-					cPair = new Point2D.Double[] { p1, p2 };
-				}
-				
-				work++; 	// work recorded for calling the add() method. This method adds an object to index 0, which takes constant time O(1)
-				this.closest.add(0, new Object[] { distance, new Point2D.Double[] { p1, p2 }});
-				
-				work++;		// work recorded for returning from the add() method
+				//if(data[index2] != null) {
+					Point2D.Double p1 = data[index1];
+					Point2D.Double p2 = data[index2];
+					
+					work++;		// work recorded for calling the getDistance() method
+					double distance = getDistance(p1, p2);
+					
+					// update the closest distance between two pairs
+					// update the closest pairs
+					if(distance < minD) {
+						minD = distance;
+						cPair = new Point2D.Double[] { p1, p2 };
+					}
+					
+					work++; 	// work recorded for calling the add() method. This method adds an object to index 0, which takes constant time O(1)
+					this.closest.add(0, new Object[] { distance, new Point2D.Double[] { p1, p2 }});
+					
+					work++;		// work recorded for returning from the add() method
+				//} 
 				work++; 	// work recorded for every loop iteration in the inner loop
 			}
 			work++;		// work recorded for breaking from the inner loop
@@ -584,7 +574,7 @@ public class ClosestPair {
 					}
 				}
 			} else {
-				for(int index=0; index < size; index++) {
+				for(int index=0; index < size; index++) {				
 					pw.print("(" + points[index].getX() + ", " + points[index].getY() + ")   " );
 	
 					if((index + 1) % 10 == 0) {

@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class MainBF {
 
 	final static int MAX_LENGTH_ARRAY = 30;  
-	final static String filepath = "./bruteforce/";
+	final static String filepath = "src/bruteforce/";
 	static PrintWriter printWriter = null;
 	static ClosestPair pairs = null;
 	static double[][] A;
@@ -76,8 +76,7 @@ public class MainBF {
 				
 				// no work calculated for IO operations
 				// print the closes pair of points found and it's distance to a file
-				pairs.printOutput(pairs.getClosestPair(), pairs.getMinDist(), printWriter);
-				
+				pairs.printOutput(pairs.getClosestPair(), pairs.getMinDist(), printWriter);				
 				printWriter.println();
 				
 				// print the total work calculated from the work in the MainBF class and in the Closest Pair class
@@ -107,7 +106,6 @@ public class MainBF {
 			// print the total work calculated from the work in the MainBF class and in the Closest Pair class to the terminal
 			// work recorded for calling the getWork() method
 			System.out.println("\nTotal work done: " + (workMain + pairs.getWork() + 1));
-		}
-		
+		}	
 	}
 }

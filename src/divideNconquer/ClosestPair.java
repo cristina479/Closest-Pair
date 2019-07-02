@@ -133,8 +133,8 @@ public class ClosestPair {
 		}
 		
 		// divide dataX and dataY in half into two arrays of points 
-		int leftSize = size/2; //(int) Math.ceil(size/2);				// (size/2)
-		int rightSize = size - (size/2); //(int) (Math.ceil(size/2));		// size - (size/2)
+		int leftSize = size/2; 
+		int rightSize = size - (size/2); 
 
 		// get middle point in dataX
 		Point2D.Double middlePoint = dataX[leftSize];
@@ -145,8 +145,6 @@ public class ClosestPair {
 
 		// initializing the counters (indices) for the size of arrays xLeft and xRight
 		int xLeftLength = 0, xRightLength = 0; 
-
-//		System.out.print("dataX indices: ");
 		
 		// initialize xLeft and xRight (each with half the points of dataX)
 		for(int index = 0; index < size; index++ ) {	
@@ -159,12 +157,6 @@ public class ClosestPair {
 					xRight[xRightLength++] = dataX[index];
 				}
 			}
-			
-//			if(index == size - 1) {
-//				System.out.println(index + " dataX size: " + dataX.length);
-//				System.out.println("xLeftLength: " + xLeftLength);
-//				System.out.println("xRightLength: " + xRightLength + "\n");
-//			}
 			work++;		// work recorded for every loop iteration in the outer loop
 		}
 		work++;		// work recorded for breaking from the inner loop
@@ -175,26 +167,18 @@ public class ClosestPair {
 		
 		// initializing the counters (indices) for the size of arrays yLeft and yRight
 		int yLeftLength = 0, yRightLength = 0;
-		
-//		System.out.print("dataY indices: ");
 
 		// initialize yLeft and yRight (each with half the points of dataY)
 		for(int index = 0; index < size; index++ ) {			
 			if(dataY[index] != null) {
-				// lower half of points in dataY where the x-coordinate is no greater than the x-coordinate of the middle point of dataX
-				if(yLeftLength < yLeft.length) {			//dataY[index].getX() <= middlePoint.getX() && 
+				// lower half of points in dataY 
+				if(yLeftLength < yLeft.length) {		
 					yLeft[yLeftLength++] = dataY[index];
 				} else {
-					// upper half of points in dataY where the x-coordinate is greater than the x-coordinate of the middle point of dataX
+					// upper half of points in dataY 
 					yRight[yRightLength++] = dataY[index];	
 				}
 			}
-			
-//			if(index == size - 1) {
-//				System.out.println(index + " dataY size: " + dataY.length);
-//				System.out.println("yLeftLength: " + yLeftLength);
-//				System.out.println("yRightLength: " + yRightLength + "\n");
-//			}
 			work++;		// work recorded for every loop iteration in the outer loop
 		}
 		work++;		// work recorded for breaking from the inner loop
@@ -416,25 +400,23 @@ public class ClosestPair {
 		// will have at most three pair of points (x, y) to compare
 		for(int index1 = 0; index1 < size - 1; index1++) {
 			for(int index2 = index1 + 1; index2 < size; index2++) {
-				//if(data[index2] != null) {
-					Point2D.Double p1 = data[index1];
-					Point2D.Double p2 = data[index2];
-					
-					work++;		// work recorded for calling the getDistance() method
-					double distance = getDistance(p1, p2);
-					
-					// update the closest distance between two pairs
-					// update the closest pairs
-					if(distance < minD) {
-						minD = distance;
-						cPair = new Point2D.Double[] { p1, p2 };
-					}
-					
-					work++; 	// work recorded for calling the add() method. This method adds an object to index 0, which takes constant time O(1)
-					this.closest.add(0, new Object[] { distance, new Point2D.Double[] { p1, p2 }});
-					
-					work++;		// work recorded for returning from the add() method
-				//} 
+				Point2D.Double p1 = data[index1];
+				Point2D.Double p2 = data[index2];
+
+				work++;		// work recorded for calling the getDistance() method
+				double distance = getDistance(p1, p2);
+
+				// update the closest distance between two pairs
+				// update the closest pairs
+				if(distance < minD) {
+					minD = distance;
+					cPair = new Point2D.Double[] { p1, p2 };
+				}
+
+				work++; 	// work recorded for calling the add() method. This method adds an object to index 0, which takes constant time O(1)
+				this.closest.add(0, new Object[] { distance, new Point2D.Double[] { p1, p2 }});
+
+				work++;		// work recorded for returning from the add() method
 				work++; 	// work recorded for every loop iteration in the inner loop
 			}
 			work++;		// work recorded for breaking from the inner loop

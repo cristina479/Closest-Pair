@@ -11,6 +11,8 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
+ * To print trace runs to a file (input >= 30) or to the terminal (input < 30), change PRINT_TRACE to true.
+ * 
  * Class for the Closest Pair Divide N Conquer algorithm
  * @author Cristina Padro-Juarbe
  *
@@ -22,7 +24,7 @@ public class ClosestPair {
 	private List<Object[]> closest; 			// Array of m <= n - 1 closest pairs of points (x, y)
 	private Point2D.Double[] closestPair;		// Structure of the array: [0]: point1, [1]: point2, [2]: distance between point1 and point2 
 	private double minDist = Double.MAX_VALUE;	// Simulates an infinite positive number
-	private static final boolean PRINT_TRACE = true;
+	private static final boolean PRINT_TRACE = false;
 	static long work = 0;						// Measures the work being done by the algorithm
 
 	/**
@@ -219,12 +221,12 @@ public class ClosestPair {
 		work++;		// work recorded for calling the closestPairsDNC() method 
 
 		// recursively obtain the closest pair of points in the left sub-array of dataX and their minimum distance
-		Object[] temp1 = closestPairsDNC(xLeft, yLeft, leftSize, pw, " on the left side of dataX");		// size - (size/2)
+		Object[] temp1 = closestPairsDNC(xLeft, yLeft, leftSize, pw, " on the left side of dataX");	
 		
 		work++;		// work recorded for calling the closestPairsDNC() method
 		
 		// recursively obtain the closest pair of points in the right sub-array of dataX and their distance
-		Object[] temp2 = closestPairsDNC(xRight, yRight, rightSize, pw, " on the right side of dataX");		// size - (size/2)
+		Object[] temp2 = closestPairsDNC(xRight, yRight, rightSize, pw, " on the right side of dataX");		
 		
 		// set the closestPair by assigning the closest pair found in the left side of dataX
 		this.closestPair = (Point2D.Double[]) temp1[1];
@@ -306,7 +308,7 @@ public class ClosestPair {
 
 		// Traverse the strip array and compare the distance between each point (x, y) in the strip. 
 		// At first, this nested loop suggests that the worst-case runtime is O(n * d), d being the minimum distance found in dataX.
-		// However, the inner loop has an upper bound O(d) which actually runs in O(1) because it compares at most 6 pairs of points (x, y).
+		// However, the inner loop has an upper bound O(d) which runs in O(1) because it compares very few points (x, y) in each recursion.
 		// This makes comparing the distance between each point (x, y) in the strip to have worst-case O(n).
 		for(int index1 = 0; index1 < stripLength; index1++) {
 			for(int index2 = index1 + 1; index2 < stripLength && (((Point2D.Double) strip[index2]).getY() - ((Point2D.Double) strip[index1]).getY()) < this.minDist; index2++) {

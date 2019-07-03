@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class MainDNC {
 
 	final static int MAX_LENGTH_ARRAY = 30;
-	final static String filepath = "src/divideNconquer/";
+	final static String filepath = "./divideNconquer/";
 	static PrintWriter printWriter = null;
 	static ClosestPair pairs = null;
 	static double[][] A;

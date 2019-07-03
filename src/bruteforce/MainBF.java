@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class MainBF {
 
 	final static int MAX_LENGTH_ARRAY = 30;  
-	final static String filepath = "src/bruteforce/";
+	final static String filepath = "./bruteforce/";
 	static PrintWriter printWriter = null;
 	static ClosestPair pairs = null;
 	static double[][] A;

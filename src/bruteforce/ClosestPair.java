@@ -7,6 +7,8 @@ import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 
 /**
+ * To print trace runs to a file (input >= 30) or to the terminal (input < 30), change PRINT_TRACE to true.
+ * 
  * Class for Closest Pair Brute Force algorithm
  * @author Cristina Padro-Juarbe
  *
